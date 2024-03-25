@@ -1,4 +1,5 @@
 import base.ChromeDriverManager;
+import base.DriverFactory;
 import models.Item;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -14,9 +15,9 @@ public class SearchTests {
         //Arrange
         String searchItem = "Product";
         String searchKey = "Product";
-//        String browser = "chrome";
-        WebDriver webDriver = new ChromeDriverManager().create();
-//        WebDriver webDriver = new DriverFactory().create(browser);
+        String browser = "chrome";
+//        WebDriver webDriver = new ChromeDriverManager().create();
+        WebDriver webDriver = new DriverFactory().create(browser);
         LauncherPage launcherPage = new LauncherPage(webDriver);
         launcherPage.navigateTo("https://web-playground.ultralesson.com/");
 
