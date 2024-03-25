@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import io.github.bonigarcia.wdm.managers.EdgeDriverManager;
 import io.github.bonigarcia.wdm.managers.FirefoxDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Objects;
 
@@ -16,8 +17,7 @@ public class DriverFactory {
             case "edge":
                 return new EdgeDriverManager().create();
             default:
-                WebDriver webDriver = new ChromeDriverManager().create();
-                return webDriver;
+                return new ChromeDriver();
         }
     }
 
