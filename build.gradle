@@ -20,3 +20,15 @@ dependencies {
 test {
     useTestNG()
 }
+
+tasks.withType(Test) {
+    systemProperties System.properties
+}
+
+task runWebTests(type: Test) {
+    outputs.upToDateWhen { false }
+    useTestNG {
+        useDefaultListeners true
+        outputDirectory = file("$buildDir/web-reports") as File
+    }
+}
