@@ -1,12 +1,12 @@
 package pages;
 
+import models.Product;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 import java.util.ArrayList;
 
-import models.Item;
 import org.openqa.selenium.WebElement;
 
 public class HomePage extends BasePage {
@@ -14,7 +14,6 @@ public class HomePage extends BasePage {
     By searchBar = By.id("Search-In-Modal");
     By searchResults = By.cssSelector("li[id^='predictive-search-option'] a");
 
-    // Scoped Element
     By productName = By.cssSelector(".predictive-search__item-heading");
 
     public HomePage(WebDriver webDriver) {
@@ -27,15 +26,30 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public List<Item> getSearchItems() {
+    public List<Product> getSearchItems() {
         List<WebElement> elements = waits.waitUntilAllElementsAreVisible(searchResults);
-        List<Item> items = new ArrayList<>();
-        for (WebElement element : elements) {
-            String name = element.findElement(productName).getText();
-            Item item = new Item();
-            item.setName(name);
-            items.add(item);
+        List<Product> products = new ArrayList<>();
+        for(WebElement element : elements) {
+            String name = actions.getChildText(element, productName);
+            Product product = new Product();
+            product.setName(name);
+            products.add(product);
         }
-        return items;
+        return products;
+    }
+
+    public ProductDetailsPage selectProduct(String name) {
+        WebElement matchingElement = getMatchingElement(name);
+        actions.click(matchingElement);
+        return new ProductDetailsPage(webDriver);
+    }
+
+    public WebElement getMatchingElement(String name) {
+        List<WebElement> elements = waits.waitUntilAllElementsAreVisible(searchResults);
+        for(WebElement element : elements) {
+            String productText = actions.getChildText(element, productName);
+            if(productText.equalsIgnoreCase(name)) return element;
+        }
+        throw new RuntimeException("Cannot find any element with name "+name);
     }
 }

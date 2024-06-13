@@ -1,34 +1,117 @@
 plugins {
+    // Apply the java plugin to add support for Java
     id 'java'
+
+    // Apply the application plugin to add support for building a CLI application
+    id 'application'
+
+    id "io.qameta.allure" version "2.11.2"
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
-
 repositories {
+    maven{
+        url "https://plugins.gradle.org/m2/"
+    }
+    // Use jcenter for resolving dependencies.
+    // You can declare any Maven/Ivy/file repository here.
     mavenCentral()
+
 }
 
 dependencies {
-    implementation 'org.seleniumhq.selenium:selenium-java:4.12.1'
-    implementation 'org.testng:testng:7.8.0'
-    implementation 'io.github.bonigarcia:webdrivermanager:5.5.3'
-//    testImplementation 'log4j:log4j:'
+    // Google
+    implementation 'com.google.guava:guava:28.0-jre'
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    // Selenium
+    implementation 'org.seleniumhq.selenium:selenium-java:4.1.1'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.0.3'
+
+    // Use TestNG framework, also requires calling test.useTestNG() below
+    implementation 'org.testng:testng:6.14.3'
+
+    //Faker
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    //AssertJ
+    implementation 'org.assertj:assertj-core:3.22.0'
+
+    //lombok
+    implementation('org.projectlombok:lombok:1.18.20')
+    annotationProcessor('org.projectlombok:lombok:1.18.20')
+    testImplementation('org.projectlombok:lombok:1.18.20')
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.20')
+
+    //allure
+    implementation('io.qameta.allure.gradle.allure:allure-plugin:2.11.2')
+    implementation('io.qameta.allure:allure-java-commons:2.14.0')
+    implementation('io.qameta.allure:allure-testng:2.14.0')
+    implementation 'org.aspectj:aspectjweaver:1.9.8.RC3'
+
 }
 
+apply plugin: "io.qameta.allure"
 
-test {
-    useTestNG()
+application {
+    // Define the main class for the application
+    mainClassName = 'com.training.web.App'
+}
+
+task runWebTests(type: Test) {
+    outputs.upToDateWhen { false }
+    useTestNG {
+        parallel = "methods"
+        threadCount Integer.parseInt(System.getProperty("sessions", "2"))
+        includeGroups System.getProperty("tags", "web")
+//        excludeGroups "wip"
+        useDefaultListeners true
+        outputDirectory = file("$buildDir/web-reports")
+        listeners << 'e2e.ScreenshotListener'
+    }
 }
 
 tasks.withType(Test) {
     systemProperties System.properties
 }
 
-task runWebTests(type: Test) {
-    outputs.upToDateWhen { false }
-    useTestNG {
-        useDefaultListeners true
-        outputDirectory = file("$buildDir/web-reports") as File
+//allure {
+//    version = '2.13.2'
+//    autoconfigure = true
+//    aspectjweaver = true
+////    allureJavaVersion = '2.13.2'
+//    reportDir = new File(project.projectDir as File, '/allure-report/ui')
+//    resultsDir = new File(project.projectDir as File, '/allure-report/results')
+//    clean = true
+//}
+
+
+task createReportDir() {
+    doLast {
+        def file = new File(project.projectDir as File, '/allure-report/ui')
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
+}
+
+task saveHistory(type: Copy) {
+    from new File(project.projectDir as File, '/allure-report/ui/history')
+    into new File(project.projectDir as File, '/allure-report/results/history')
+}
+
+
+clean {
+    if (!System.getenv('CI')) {
+        delete "$projectDir/allure-report"
+        delete "$projectDir/allure-results"
+    }
+}
+
+// Execution Rules
+tasks.runWebTests.dependsOn 'clean', 'build', 'createReportDir'
+tasks.build.mustRunAfter 'clean'
+tasks.runWebTests.finalizedBy('allureReport')
+
+configurations {
+    testCompile
 }
