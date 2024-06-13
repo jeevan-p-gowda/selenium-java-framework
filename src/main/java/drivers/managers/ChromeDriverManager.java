@@ -1,13 +1,13 @@
-package base;
+package drivers.managers;
 
 import internal.Toggles;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-public class ChromeDriverManager {
+public class ChromeDriverManager implements DriverManager<WebDriver> {
     public WebDriver create() {
-        if(Toggles.HEADLESS.isOn()) {
+        if (Toggles.HEADLESS.isOn()) {
             return createHeadlessChromeDriver();
         }
         return new io.github.bonigarcia.wdm.managers.ChromeDriverManager().create();

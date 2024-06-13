@@ -1,6 +1,5 @@
-import base.ChromeDriverManager;
-import base.DriverFactory;
-import models.Item;
+import drivers.DriverFactory;
+import models.Product;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -24,10 +23,10 @@ public class SearchTests {
         //Act
         HomePage homepage = new HomePage(webDriver);
         homepage.search(searchItem);
-        List<Item> searchItems = homepage.getSearchItems();
+        List<Product> searchProducts = homepage.getSearchItems();
 
         //Assert
-        Assert.assertEquals(1, searchItems.size());
-        Assert.assertFalse(searchItems.stream().allMatch(item -> item.getName().contains(searchKey)));
+        Assert.assertEquals(1, searchProducts.size());
+        Assert.assertFalse(searchProducts.stream().allMatch(product -> product.getName().contains(searchKey)));
     }
 }

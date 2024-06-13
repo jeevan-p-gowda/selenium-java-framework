@@ -7,11 +7,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class LauncherPage extends BasePage {
-    private WebDriver webDriver;
-
     public LauncherPage(WebDriver webDriver) {
         super(webDriver);
-        this.webDriver = webDriver;
     }
 
 

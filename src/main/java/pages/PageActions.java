@@ -15,30 +15,31 @@ public class PageActions {
         this.waits = new PageWaits(webDriver);
     }
 
-    public void navigateTo(String url) {
-        webDriver.get(url);
+    public PageActions click(By by) {
+        waits.waitForElementToBeClickable(by).click();
+        return this;
     }
 
-    public void refreshPage() {
-        webDriver.navigate().refresh();
+    public PageActions click(WebElement element) {
+        waits.waitForElementToBeClickable(element).click();
+        return this;
     }
 
-    public void executeJS(String script, Object... args) {
-        JavascriptExecutor jsExecutor = (JavascriptExecutor) webDriver;
-        jsExecutor.executeScript(script, args);
-    }
-
-    public void takeScreenshot(String name) throws IOException {
-        TakesScreenshot screenshotTaker = (TakesScreenshot) webDriver;
-        File screenshot = screenshotTaker.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(screenshot, new File("./screenshots/" + name + ".png"));
-    }
-
-    public void click(By by) {
-        waits.waitForElementToBePresent(by).click();
-    }
-
-    public void type(By by, String value) {
+    public PageActions type(By by, String value) {
         waits.waitForElementToBePresent(by).sendKeys(value);
+        return this;
+    }
+
+    public PageActions clear(By by) {
+        waits.waitForElementToBePresent(by).clear();
+        return this;
+    }
+
+    public String getText(By by) {
+        return waits.waitForElementToBePresent(by).getText();
+    }
+
+    public String getChildText(WebElement parent, By by) {
+        return parent.findElement(by).getText();
     }
 }
