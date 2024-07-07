@@ -1,4 +1,4 @@
-<img align=right src="https://avatars.githubusercontent.com/u/983927?s=200&v=4" title="Selenium" width='auto' height="70"/>
+# selenium-java-framework <img align=right src="https://avatars.githubusercontent.com/u/983927?s=200&v=4" title="Selenium" width='auto' height="70"/>
 
 ### 🧩Application
 E-Commerce [Swagger](https://www.apicademy.dev/docs/)
