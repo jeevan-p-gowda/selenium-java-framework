@@ -16,3 +16,6 @@ Java foundation and beyond
 
 ### ⏯️Execution
 `./gradlew runWebTests`
+
+### 🔬To Do's
+[Allure Report with history](https://github.com/marketplace/actions/allure-report-with-history)
