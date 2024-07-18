@@ -13,3 +13,6 @@ Java foundation and beyond
 4. `git clone` the repo
 5. Install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/?section=windows) and open the repo
 6. `./gradlew clean build`
+
+### ⏯️Execution
+`./gradlew runWebTests`
