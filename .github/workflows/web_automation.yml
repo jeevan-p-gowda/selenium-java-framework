@@ -50,5 +50,5 @@ jobs:
       uses: actions/upload-artifact@v2
       if: ${{ always() }}
       with:
-        name: web_test
-        path: build/web-reports
+        name: Test-Report
+        path: allure-report/ui
