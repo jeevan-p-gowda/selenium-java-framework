@@ -14,6 +14,7 @@ E-Commerce - [Website](https://web-playground.ultralesson.com)
 4. `git clone` the repo
 5. Install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/?section=windows) and open the repo, load all dependencies
 6. `./gradlew clean build`
+   > If using Windows, set IDE terminal to Git Bash and execute.
 
 ### ⏯️Execution
 `./gradlew runWebTests`
